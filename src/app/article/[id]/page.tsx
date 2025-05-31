@@ -2,14 +2,16 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-type Article = {
-  title: string;
-  content: string;
-  question: string;
-  answer: string;
-};
-
-const articles: Record<string, Article> = {
+// 仮の記事データ（APIやDBと置き換え可）
+const articles: Record<
+  string,
+  {
+    title: string;
+    content: string;
+    question: string;
+    answer: string;
+  }
+> = {
   "1": {
     title: "VSOとは？音声検索時代のSEO戦略",
     content:
@@ -31,14 +33,17 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const article = articles[params.id];
   if (!article) return {};
-
   return {
     title: article.title,
     description: article.content.slice(0, 60),
   };
 }
 
-export default function ArticlePage({ params }: { params: { id: string } }) {
+export default async function ArticlePage({
+  params,
+}: {
+  params: { id: string };
+}) {
   const article = articles[params.id];
   if (!article) return notFound();
 
