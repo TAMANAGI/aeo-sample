@@ -3,35 +3,43 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 type Props = {
-  params: { id: string };
+  params: {
+    id: string;
+  };
 };
 
-// 仮のデータ（通常はDB/APIから取得）
-const articles = {
+// 仮データ
+const articles: Record<
+  string,
+  {
+    title: string;
+    content: string;
+    question: string;
+    answer: string;
+  }
+> = {
   "1": {
     title: "VSOとは？音声検索時代のSEO戦略",
-    content: `VSO（Voice Search Optimization）は、音声検索でヒットしやすくするための施策。
-自然な会話文の使用、FAQ構造、モバイル対応などが重要です。`,
+    content:
+      "VSO（Voice Search Optimization）は、音声検索でヒットしやすくするための施策。自然な会話文の使用、FAQ構造、モバイル対応などが重要です。",
     question: "VSOとは？",
     answer:
       "VSOはVoice Search Optimizationの略で、音声検索に最適化されたSEO手法のことです。",
   },
 };
 
-// 動的メタデータ
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const article = articles[params.id];
   if (!article) return {};
 
   return {
     title: article.title,
-    description: article.content.slice(0, 60) + "...",
+    description: article.content.slice(0, 60),
   };
 }
 
 export default function ArticlePage({ params }: Props) {
   const article = articles[params.id];
-
   if (!article) return notFound();
 
   const jsonLd = {
