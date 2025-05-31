@@ -2,22 +2,14 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-type Props = {
-  params: {
-    id: string;
-  };
+type Article = {
+  title: string;
+  content: string;
+  question: string;
+  answer: string;
 };
 
-// 仮データ
-const articles: Record<
-  string,
-  {
-    title: string;
-    content: string;
-    question: string;
-    answer: string;
-  }
-> = {
+const articles: Record<string, Article> = {
   "1": {
     title: "VSOとは？音声検索時代のSEO戦略",
     content:
@@ -28,7 +20,15 @@ const articles: Record<
   },
 };
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateStaticParams() {
+  return Object.keys(articles).map((id) => ({ id }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { id: string };
+}): Promise<Metadata> {
   const article = articles[params.id];
   if (!article) return {};
 
@@ -38,7 +38,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default function ArticlePage({ params }: Props) {
+export default function ArticlePage({ params }: { params: { id: string } }) {
   const article = articles[params.id];
   if (!article) return notFound();
 
