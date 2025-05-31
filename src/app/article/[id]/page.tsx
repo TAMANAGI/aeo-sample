@@ -1,49 +1,31 @@
-// app/article/[id]/page.tsx
-import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-// 仮の記事データ（APIやDBと置き換え可）
-const articles: Record<
-  string,
-  {
-    title: string;
-    content: string;
-    question: string;
-    answer: string;
-  }
-> = {
+export const dynamicParams = false;
+
+const articles = {
   "1": {
-    title: "VSOとは？音声検索時代のSEO戦略",
-    content:
-      "VSO（Voice Search Optimization）は、音声検索でヒットしやすくするための施策。自然な会話文の使用、FAQ構造、モバイル対応などが重要です。",
+    title: "VSOとは？",
+    content: "音声検索に最適化されたSEO手法のことです。",
     question: "VSOとは？",
-    answer:
-      "VSOはVoice Search Optimizationの略で、音声検索に最適化されたSEO手法のことです。",
+    answer: "VSOはVoice Search Optimizationの略で、音声検索SEOです。",
   },
 };
 
-export async function generateStaticParams() {
+export function generateStaticParams() {
   return Object.keys(articles).map((id) => ({ id }));
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { id: string };
-}): Promise<Metadata> {
+// ❌ 型注釈なし！
+export function generateMetadata({ params }) {
   const article = articles[params.id];
-  if (!article) return {};
   return {
     title: article.title,
-    description: article.content.slice(0, 60),
+    description: article.content,
   };
 }
 
-export default async function ArticlePage({
-  params,
-}: {
-  params: { id: string };
-}) {
+// ❌ 型注釈なし！
+export default function ArticlePage({ params }) {
   const article = articles[params.id];
   if (!article) return notFound();
 
@@ -63,10 +45,9 @@ export default async function ArticlePage({
   };
 
   return (
-    <main className="p-6">
-      <h1 className="text-2xl font-bold mb-4">{article.title}</h1>
+    <main>
+      <h1>{article.title}</h1>
       <p>{article.content}</p>
-
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
