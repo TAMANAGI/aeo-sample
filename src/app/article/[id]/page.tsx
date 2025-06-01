@@ -4,10 +4,10 @@ export const dynamicParams = false;
 
 const articles = {
   "1": {
-    title: "VSOとは？",
-    content: "音声検索に最適化されたSEO手法のことです。",
-    question: "VSOとは？",
-    answer: "VSOはVoice Search Optimizationの略で、音声検索SEOです。",
+    title: "にゃんこ大戦争とは？",
+    content: "こたえはJSON-LDに・・・",
+    question: "にゃんこ大戦争とは？",
+    answer: "にゃんこ大戦争とはにゃんこのゲームです",
   },
 };
 
